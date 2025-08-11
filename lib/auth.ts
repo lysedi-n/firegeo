@@ -1,10 +1,13 @@
 import { betterAuth } from 'better-auth';
 import { Pool } from 'pg';
 import { sendEmail } from './email';
+import { Pool } from 'pg';
+const isProd = process.env.NODE_ENV === 'production';
 
 export const auth = betterAuth({
   database: new Pool({
     connectionString: process.env.DATABASE_URL!,
+    ssl: isProd ? { rejectUnauthorized: false } : undefined,
   }),
   secret: process.env.BETTER_AUTH_SECRET!,
   baseURL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
